@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <div>
+    <div style={{ backgroundColor: 'FFFFFF' }}>
       <SideBar />
     </div>
   );
