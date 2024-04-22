@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.d-flex {
+    height: 100%;
+}
+
+
+#main-heading {
+    border-bottom: .3em solid black;
+}
+
+#todos-display {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-height: 50%;
+    padding: .5em 0;
+    overflow-y: auto;
+}
+
+.todo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    font-size: 1.5rem;
+    padding: .5em;
+    border-radius: .5em;
+}
+
+.todo-card:hover {
+    box-shadow: 0 .15em .3em black;
+    transition: ease;
+}
+
+.date-time-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+.todo-btns {
+    display: flex;
+    gap: .5em;
+}

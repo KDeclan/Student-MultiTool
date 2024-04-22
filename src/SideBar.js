@@ -13,12 +13,12 @@ const SideBar = () => {
       <div id="add-bttn-section" className="hover-effect" style={{ fontSize: '2rem', marginTop: '.5em' }}>
       <p id="add-bttn"><IoAddCircle /> Add Task</p>
       </div>
-      <div id="date-tags" style={{ fontSize: '2rem', margin: '1em 0' }}>
+      <div id="date-tags" className="border-bar" style={{ fontSize: '2rem', margin: '1em 0' }}>
         <p id="today-tag" className="hover-effect"><FaCalendarDay /> Today</p>
         <p id="sevenDay-tag" className="hover-effect"><FaCalendarWeek /> Next 7 Days</p>
         <p id="fullDay-tag" className="hover-effect"><FaCalendarAlt /> Full Schedule</p>
       </div>
-      <div id="tools" style={{ fontSize: '2rem', margin: '1em 0' }}>
+      <div id="tools" className="border-bar" style={{ fontSize: '2rem', margin: '1em 0' }}>
         <p className="hover-effect"><FaStopwatch /> Pomodoro</p>
         <p className="hover-effect"><FaQuoteRight size='1.5rem'/> Quote Machine</p>
       </div>
