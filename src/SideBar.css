@@ -5,9 +5,9 @@
   
   .hover-effect:hover {
     background-color: #f0f0f0;
-    color: #e6869d;
+    color: var(--lm-accent-color);
   }
 
   .border-bar {
-    border-bottom: .1em solid black;
+    border-bottom: .1em solid var(--lm-border-color);
   }

@@ -1,13 +1,16 @@
 .app-container {
     display: flex;
     min-height: 100vh;
+    background-color: var(--lm-main-bg-color);
 }
 
 .sidebar {
     width: 16.5%;
     height: 100vh;
+    background-color: var(--lm-sidebar-color);
 }
 
 .main-content {
-    flex-grow: 1; 
+    flex-grow: 1;
+    height: 100vh; 
 }

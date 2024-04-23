@@ -9,46 +9,106 @@ html, body {
     overflow: hidden;
 }
 
+.btn-primary {
+    background-color: var(--lm-accent-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--lm-thumb-color);
+}
+
 .d-flex {
     height: 100%;
 }
 
 
 #main-heading {
-    border-bottom: .3em solid black;
+    border-bottom: .3em solid var(--lm-border-color);
+}
+
+#main-body {
+    margin: auto auto;
+    width: 50%;
 }
 
 #todos-display {
     display: flex;
     flex-direction: column;
     gap: 1em;
-    max-height: 50%;
-    padding: .5em 0;
+    height: 90vh;
+    max-height: 87%;
+    width: 100%;
+    margin: auto auto;
+    padding: 1em 1em;
     overflow-y: auto;
+    overflow-x: hidden;
 }
+
+#todos-display::-webkit-scrollbar {
+    width: .5em;
+}
+
+#todos-display::-webkit-scrollbar-track {
+    background: var(--lm-sidebar-color);
+    border-radius: .5em; 
+}
+
+#todos-display::-webkit-scrollbar-thumb {
+    background: var(--lm-thumb-color);
+    border-radius: .5em;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    gap: 1em;
+}  
 
 .todo-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 50%;
-    font-size: 1.5rem;
-    padding: .5em;
-    border-radius: .5em;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.3rem;
+    padding: 0 0;
+    border-bottom: .1em solid var(--lm-border-color);
+    text-wrap: nowrap;
 }
 
-.todo-card:hover {
-    box-shadow: 0 .15em .3em black;
-    transition: ease;
-}
-
-.date-time-row {
+.todo-content {
     display: flex;
-    flex-direction: row;
-    gap: 1em;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
 }
 
-.todo-btns {
-    display: flex;
-    gap: .5em;
+.todo-inline {
+    display: inline-flex;
+}
+
+.circle-toggle {
+    width: 1em;
+    height: 1em;
+    border: .1em solid var(--lm-border-color);
+    border-radius: 50%;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.trash-btn {
+    align-self: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
+    transform: translateX(1em);
+}
+
+.todo-card.toggled .trash-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
 }

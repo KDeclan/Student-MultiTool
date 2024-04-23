@@ -3,15 +3,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FaCalendarDay, FaCalendarWeek, FaCalendarAlt, FaCog, FaStopwatch, FaQuoteRight } from 'react-icons/fa';
 import { IoAddCircle } from 'react-icons/io5';
 import './SideBar.css';
+import './global.css'
 
-const SideBar = () => {
+const SideBar = ({ onAddTaskClick }) => {
   return (
     <div
       className="d-flex flex-column align-items-center justify-content-between vh-100"
-      style={{ backgroundColor: '#EEEEEE', boxShadow: '.2em 0 .5em rgba(0,0,0,0.3)', position: 'fixed', width: '20em', top: 0, left: 0 }}
+      style={{ boxShadow: '.2em 0 .5em rgba(0,0,0,0.3)', position: 'fixed', width: '20em', top: 0, left: 0 }}
     >
       <div id="add-bttn-section" className="hover-effect" style={{ fontSize: '2rem', marginTop: '.5em' }}>
-      <p id="add-bttn"><IoAddCircle /> Add Task</p>
+      <p id="add-bttn" onClick={onAddTaskClick}><IoAddCircle /> Add Task</p>
       </div>
       <div id="date-tags" className="border-bar" style={{ fontSize: '2rem', margin: '1em 0' }}>
         <p id="today-tag" className="hover-effect"><FaCalendarDay /> Today</p>
