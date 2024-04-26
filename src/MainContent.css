@@ -1,114 +1,133 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
 
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+.animated-text {
+  animation: bounce 2s ease-in-out;
 }
 
 .btn-primary {
-    background-color: var(--lm-accent-color);
-    border: none;
+  background-color: var(--lm-accent-color);
+  border: none;
 }
 
 .btn-primary:hover {
-    background-color: var(--lm-thumb-color);
+  background-color: var(--lm-thumb-color);
 }
 
 .d-flex {
-    height: 100%;
+  height: 100%;
 }
 
-
 #main-heading {
-    border-bottom: .3em solid var(--lm-border-color);
+  border-bottom: 0.3em solid var(--lm-border-color);
 }
 
 #main-body {
-    margin: auto auto;
-    width: 50%;
+  margin: auto auto;
+  width: 50%;
 }
 
 #todos-display {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    height: 90vh;
-    max-height: 87%;
-    width: 100%;
-    margin: auto auto;
-    padding: 1em 1em;
-    overflow-y: auto;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  height: 90vh;
+  max-height: 87%;
+  width: 100%;
+  margin: 0.5em auto;
+  padding: 1em 1em;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #todos-display::-webkit-scrollbar {
-    width: .5em;
+  width: 0.5em;
 }
 
 #todos-display::-webkit-scrollbar-track {
-    background: var(--lm-sidebar-color);
-    border-radius: .5em; 
+  background: var(--lm-sidebar-color);
+  border-radius: 0.5em;
 }
 
 #todos-display::-webkit-scrollbar-thumb {
-    background: var(--lm-thumb-color);
-    border-radius: .5em;
+  background: var(--lm-thumb-color);
+  border-radius: 0.5em;
 }
 
 .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    gap: 1em;
-}  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 1em;
+}
 
 .todo-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    font-size: 1.3rem;
-    padding: 0 0;
-    border-bottom: .1em solid var(--lm-border-color);
-    text-wrap: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.3rem;
+  padding: 0 0;
+  border-bottom: 0.1em solid var(--lm-border-color);
+  text-wrap: nowrap;
 }
 
 .todo-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .todo-inline {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .circle-toggle {
-    width: 1em;
-    height: 1em;
-    border: .1em solid var(--lm-border-color);
-    border-radius: 50%;
-    align-self: flex-start;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  border: 0.1em solid var(--lm-border-color);
+  border-radius: 50%;
+  align-self: flex-start;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
 }
 
 .trash-btn {
-    align-self: flex-end;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
-    transform: translateX(1em);
+  align-self: flex-end;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  transform: translateX(1em);
 }
 
 .todo-card.toggled .trash-btn {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
 }
