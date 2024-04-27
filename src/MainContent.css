@@ -9,6 +9,11 @@ body {
   overflow: hidden;
 }
 
+#maincontent-top-level {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 @keyframes bounce {
   0%,
   20%,
@@ -30,12 +35,12 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--lm-accent-color);
+  background-color: var(--accent-color);
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: var(--lm-thumb-color);
+  background-color: var(--thumb-color);
 }
 
 .d-flex {
@@ -43,7 +48,7 @@ body {
 }
 
 #main-heading {
-  border-bottom: 0.3em solid var(--lm-border-color);
+  border-bottom: 0.3em solid var(--border-color);
 }
 
 #main-body {
@@ -59,7 +64,7 @@ body {
   max-height: 87%;
   width: 100%;
   margin: 0.5em auto;
-  padding: 1em 1em;
+  padding: 1em;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -69,12 +74,12 @@ body {
 }
 
 #todos-display::-webkit-scrollbar-track {
-  background: var(--lm-sidebar-color);
+  background: var(--slider-bg-color);
   border-radius: 0.5em;
 }
 
 #todos-display::-webkit-scrollbar-thumb {
-  background: var(--lm-thumb-color);
+  background: var(--slider-thumb-color);
   border-radius: 0.5em;
 }
 
@@ -93,7 +98,7 @@ body {
   width: 100%;
   font-size: 1.3rem;
   padding: 0 0;
-  border-bottom: 0.1em solid var(--lm-border-color);
+  border-bottom: 0.1em solid var(--border-color);
   text-wrap: nowrap;
 }
 
@@ -111,7 +116,7 @@ body {
 .circle-toggle {
   width: 1em;
   height: 1em;
-  border: 0.1em solid var(--lm-border-color);
+  border: 0.1em solid var(--border-color);
   border-radius: 50%;
   align-self: flex-start;
   transition: background-color 0.3s ease;

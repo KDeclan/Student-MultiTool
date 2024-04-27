@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "./ThemeContext";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import "./MainContent.css";
+import "./global.css";
 
 const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
   const [timeOfDay, setTimeofDay] = useState("");
@@ -10,6 +12,8 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
     const savedTodos = localStorage.getItem("todos");
     return savedTodos ? JSON.parse(savedTodos) : [];
   });
+
+  const { theme } = useTheme();
 
   const filteredTodos = () => {
     const today = new Date();
@@ -114,7 +118,11 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
   }, []);
 
   return (
-    <div className="d-flex flex-column vh-100">
+    <div
+      id="maincontent-top-level"
+      className="d-flex flex-column vh-100"
+      data-theme={theme}
+    >
       <div id="main-heading" style={{ alignSelf: "center" }}>
         <h1
           className="animated-text"
@@ -180,7 +188,7 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
                     className="circle-toggle"
                     style={{
                       backgroundColor: todo.toggled
-                        ? "var(--lm-accent-color)"
+                        ? "var(--accent-color)"
                         : "transparent",
                     }}
                   ></div>

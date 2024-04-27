@@ -1,19 +1,19 @@
 .app-container {
-    display: grid;
-    grid-template-columns: 20em 1fr;
-    min-height: 100vh;
-    background-color: var(--lm-main-bg-color);
-    color: var(--lm-text-color);
+  display: grid;
+  grid-template-columns: 20em 1fr;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .sidebar {
-    height: 100vh;
-    background-color: var(--lm-sidebar-color);
-    color: var(--lm-text-color);
+  height: 100vh;
+  background-color: var(--sidebar-color);
+  color: var(--text-color);
 }
 
 .main-content {
-    flex-grow: 1;
-    height: 100vh; 
-    color: var(--lm-text-color);
+  flex-grow: 1;
+  height: 100vh;
+  color: var(--text-color);
 }

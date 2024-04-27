@@ -1,20 +1,24 @@
+#sidebar-top-level {
+  color: var(--text-color);
+  background-color: var(--sidebar-color);
+}
+
 .hover-effect {
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .hover-effect:hover {
-  background-color: #f0f0f0;
-  color: var(--lm-accent-color);
+  color: var(--accent-color);
 }
 
 .border-bar {
-  border-bottom: 0.1em solid var(--lm-border-color);
+  border-bottom: 0.1em solid var(--border-color);
 }
 
 #settings-top-bar {
   margin-top: 0.5em;
-  border-bottom: 0.1em solid var(--lm-border-color);
+  border-bottom: 0.1em solid var(--border-color);
 }
 
 #color-settings {
@@ -43,13 +47,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--lm-slider-bg-color);
+  background-color: var(--slider-bg-color);
   transition: 0.4s;
   border-radius: 34px;
 }
 
 .toggle-switch-checkbox:checked + .toggle-switch-slider {
-  background-color: var(--lm-accent-color);
+  background-color: var(--accent-color);
 }
 
 .toggle-switch-slider:before {
@@ -59,7 +63,7 @@
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--lm-main-bg-color);
+  background-color: white;
   transition: 0.4s;
   border-radius: 50%;
 }
@@ -73,5 +77,6 @@
 }
 
 .return-btn {
+  color: var(--text-color);
   font-size: 2rem;
 }

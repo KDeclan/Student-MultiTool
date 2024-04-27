@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "./ThemeContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   FaCalendarDay,
@@ -14,6 +15,7 @@ import "./global.css";
 
 const SideBar = ({ onAddTaskClick, onFilterChange }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const handleSettingsClick = () => {
     setShowSettings(!showSettings);
@@ -21,7 +23,9 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
 
   return (
     <div
+      id="sidebar-top-level"
       className="d-flex flex-column align-items-center justify-content-between vh-100"
+      data-theme={theme}
       style={{
         boxShadow: ".2em 0 .5em rgba(0,0,0,0.3)",
         position: "fixed",
@@ -40,7 +44,12 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
           <div id="color-settings">
             <h2>Dark Mode</h2>
             <label className="toggle-switch">
-              <input type="checkbox" className="toggle-switch-checkbox" />
+              <input
+                type="checkbox"
+                className="toggle-switch-checkbox"
+                onClick={toggleTheme}
+                checked={theme === "dark"}
+              />
               <span className="toggle-switch-slider"></span>
             </label>
           </div>
