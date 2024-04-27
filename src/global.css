@@ -1,8 +1,9 @@
 :root {
-    --lm-main-bg-color: #FFFFFF;
-    --lm-sidebar-color: #EEEEEE;
-    --lm-accent-color: #e6869d;
-    --lm-border-color: #000000;
-    --lm-thumb-color: #888;
-    --lm-text-color: #000000;
+  --lm-main-bg-color: #ffffff;
+  --lm-sidebar-color: #eeeeee;
+  --lm-accent-color: #e6869d;
+  --lm-border-color: #000000;
+  --lm-thumb-color: #888;
+  --lm-text-color: #000000;
+  --lm-slider-bg-color: #ccc;
 }

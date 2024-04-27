@@ -13,8 +13,11 @@ import "./SideBar.css";
 import "./global.css";
 
 const SideBar = ({ onAddTaskClick, onFilterChange }) => {
-  const [showSettings, setShowSettings] = useState(false); //Implement: toggle setting view on sidebar, use ternary operator in jsx of sidebar - similar to maincontent
-  //Same thing for other sidebar functions (pomodoro, quote machine etc...)
+  const [showSettings, setShowSettings] = useState(false);
+
+  const handleSettingsClick = () => {
+    setShowSettings(!showSettings);
+  };
 
   return (
     <div
@@ -27,63 +30,90 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
         left: 0,
       }}
     >
-      <div
-        id="add-bttn-section"
-        className="hover-effect"
-        style={{ fontSize: "2rem", marginTop: ".5em" }}
-      >
-        <p id="add-bttn" onClick={onAddTaskClick}>
-          <IoAddCircle /> Add Task
-        </p>
-      </div>
-      <div
-        id="date-tags"
-        className="border-bar"
-        style={{ fontSize: "2rem", margin: "1em 0" }}
-      >
-        <p
-          id="today-tag"
-          className="hover-effect"
-          onClick={() => onFilterChange("Today")}
-        >
-          <FaCalendarDay /> Today
-        </p>
-        <p
-          id="sevenDay-tag"
-          className="hover-effect"
-          onClick={() => onFilterChange("Next 7 Days")}
-        >
-          <FaCalendarWeek /> Next 7 Days
-        </p>
-        <p
-          id="fullDay-tag"
-          className="hover-effect"
-          onClick={() => onFilterChange("Full Schedule")}
-        >
-          <FaCalendarAlt /> Full Schedule
-        </p>
-      </div>
-      <div
-        id="tools"
-        className="border-bar"
-        style={{ fontSize: "2rem", margin: "1em 0" }}
-      >
-        <p className="hover-effect">
-          <FaStopwatch /> Pomodoro
-        </p>
-        <p className="hover-effect">
-          <FaQuoteRight size="1.5rem" /> Quote Machine
-        </p>
-      </div>
-      <div
-        id="settings"
-        className="hover-effect"
-        style={{ fontSize: "2rem", marginBottom: ".5em" }}
-      >
-        <p>
-          <FaCog /> Settings
-        </p>
-      </div>
+      {showSettings ? (
+        <>
+          <div id="settings-top-bar">
+            <h2 id="settings-head-text">
+              <FaCog /> Settings
+            </h2>
+          </div>
+          <div id="color-settings">
+            <h2>Dark Mode</h2>
+            <label className="toggle-switch">
+              <input type="checkbox" className="toggle-switch-checkbox" />
+              <span className="toggle-switch-slider"></span>
+            </label>
+          </div>
+          <div id="return-btn-section" className="hover-effect">
+            <button
+              className="btn return-btn"
+              onClick={() => handleSettingsClick()}
+            >
+              ◄ Return
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div
+            id="add-bttn-section"
+            className="hover-effect"
+            style={{ fontSize: "2rem", marginTop: ".5em" }}
+          >
+            <p id="add-bttn" onClick={onAddTaskClick}>
+              <IoAddCircle /> Add Task
+            </p>
+          </div>
+          <div
+            id="date-tags"
+            className="border-bar"
+            style={{ fontSize: "2rem", margin: "1em 0" }}
+          >
+            <p
+              id="today-tag"
+              className="hover-effect"
+              onClick={() => onFilterChange("Today")}
+            >
+              <FaCalendarDay /> Today
+            </p>
+            <p
+              id="sevenDay-tag"
+              className="hover-effect"
+              onClick={() => onFilterChange("Next 7 Days")}
+            >
+              <FaCalendarWeek /> Next 7 Days
+            </p>
+            <p
+              id="fullDay-tag"
+              className="hover-effect"
+              onClick={() => onFilterChange("Full Schedule")}
+            >
+              <FaCalendarAlt /> Full Schedule
+            </p>
+          </div>
+          <div
+            id="tools"
+            className="border-bar"
+            style={{ fontSize: "2rem", margin: "1em 0" }}
+          >
+            <p className="hover-effect">
+              <FaStopwatch /> Pomodoro
+            </p>
+            <p className="hover-effect">
+              <FaQuoteRight size="1.5rem" /> Quote Machine
+            </p>
+          </div>
+          <div
+            id="settings"
+            className="hover-effect"
+            style={{ fontSize: "2rem", marginBottom: ".5em" }}
+          >
+            <p onClick={handleSettingsClick}>
+              <FaCog /> Settings
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

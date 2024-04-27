@@ -8,7 +8,7 @@ import "./global.css";
 const App = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("Full Schedule");
-  //You have started the settings functionality, here will go the actual theme logic. The settings display logic is in the sidebar component
+  // You have finished settings ui with dark mode toggle. Add dark mode functionality here. use a context, consult notes
 
   const handleAddTaskClick = () => {
     setShowAddForm(true);
