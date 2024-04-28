@@ -15,10 +15,46 @@ import "./global.css";
 
 const SideBar = ({ onAddTaskClick, onFilterChange }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [showQuoteDisplay, setShowQuoteDisplay] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState("");
+  const [quote, setQuote] = useState({
+    text: "Press 'New Quote' Button",
+    author: "",
+  });
   const { theme, toggleTheme } = useTheme();
+
+  const handleQuoteDisplay = () => {
+    setShowQuoteDisplay(!showQuoteDisplay);
+  };
 
   const handleSettingsClick = () => {
     setShowSettings(!showSettings);
+  };
+
+  const handleNewQuote = () => {
+    const quoteColors = [
+      "#c8f4f3",
+      "#ff8680",
+      "#c2ffa9",
+      "#ffb783",
+      "#ff97ed",
+      "#b395ff",
+      "#A87676",
+      "#EBE3D5",
+      "#ffe9aa",
+    ];
+    const randomColor =
+      quoteColors[Math.floor(Math.random() * quoteColors.length)];
+    setBackgroundColor(randomColor);
+
+    fetch("https://api.quotable.io/random")
+      .then((response) => response.json())
+      .then((data) => {
+        setQuote({ text: data.content, author: data.author });
+      })
+      .catch((error) => {
+        setQuote({ text: "Failed to load quote", author: "" });
+      });
   };
 
   return (
@@ -27,7 +63,7 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
       className="d-flex flex-column align-items-center justify-content-between vh-100"
       data-theme={theme}
       style={{
-        boxShadow: ".2em 0 .5em rgba(0,0,0,0.3)",
+        boxShadow: ".2em 0 .5em var(--sidebar-shadow)",
         position: "fixed",
         width: "20em",
         top: 0,
@@ -53,11 +89,40 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
               <span className="toggle-switch-slider"></span>
             </label>
           </div>
-          <div id="return-btn-section" className="hover-effect">
-            <button
-              className="btn return-btn"
-              onClick={() => handleSettingsClick()}
+          <div className="hover-effect return-btn-section">
+            <button className="btn return-btn" onClick={handleSettingsClick}>
+              ◄ Return
+            </button>
+          </div>
+        </>
+      ) : showQuoteDisplay ? (
+        <>
+          <div id="quote-display">
+            <h2>
+              <FaQuoteRight size="1.5rem" /> Quote Machine
+            </h2>
+          </div>
+          <div id="quote-text">
+            <p
+              className="card p-3"
+              style={{
+                color: "black",
+                backgroundColor: backgroundColor,
+              }}
             >
+              {quote.text}
+            </p>
+            <p style={{ alignSelf: "flex-end" }}>
+              - {quote.author || "Unknown"}
+            </p>
+          </div>
+          <div id="new-quote-btn">
+            <button className="btn btn-primary" onClick={handleNewQuote}>
+              New Quote
+            </button>
+          </div>
+          <div className="hover-effect return-btn-section">
+            <button className="btn return-btn" onClick={handleQuoteDisplay}>
               ◄ Return
             </button>
           </div>
@@ -105,11 +170,11 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
             className="border-bar"
             style={{ fontSize: "2rem", margin: "1em 0" }}
           >
-            <p className="hover-effect">
-              <FaStopwatch /> Pomodoro
+            <p className="hover-effect" onClick={handleQuoteDisplay}>
+              <FaQuoteRight size="1.5rem" /> Quote Machine
             </p>
             <p className="hover-effect">
-              <FaQuoteRight size="1.5rem" /> Quote Machine
+              <FaStopwatch /> Pomodoro
             </p>
           </div>
           <div

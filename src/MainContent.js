@@ -174,7 +174,7 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
             </form>
           </div>
         ) : (
-          <div id="todos-display">
+          <div id="todos-display" className="container">
             {filteredTodos().map((todo, index) => (
               <div
                 key={index}

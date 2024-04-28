@@ -16,6 +16,11 @@
   border-bottom: 0.1em solid var(--border-color);
 }
 
+#quote-display {
+  border-bottom: 0.1em solid var(--border-color);
+  margin-top: 0.5em;
+}
+
 #settings-top-bar {
   margin-top: 0.5em;
   border-bottom: 0.1em solid var(--border-color);
@@ -72,7 +77,13 @@
   transform: translateX(1.6em);
 }
 
-#return-btn-section {
+#quote-text {
+  display: flex;
+  flex-direction: column;
+  max-width: 90%;
+}
+
+.return-btn-section {
   margin-bottom: 1em;
 }
 

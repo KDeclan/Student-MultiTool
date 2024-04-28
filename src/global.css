@@ -1,6 +1,7 @@
 :root {
   --main-bg-color: #ffffff;
   --sidebar-color: #eeeeee;
+  --sidebar-shadow: rgba(0, 0, 0, 0.3);
   --accent-color: #e6869d;
   --border-color: #000000;
   --thumb-color: #888;
@@ -13,6 +14,7 @@
   --text-color: #000000;
   --border-color: #000000;
   --sidebar-color: #eeeeee;
+  --sidebar-shadow: rgba(0, 0, 0, 0.3);
   --accent-color: #e6869d;
   --slider-thumb-color: #888;
   --slider-bg-color: #ccc;
@@ -23,6 +25,7 @@
   --text-color: #ecdede;
   --border-color: #3f3d3d;
   --sidebar-color: #242323;
+  --sidebar-shadow: #aec1781e;
   --accent-color: #adc178;
   --slider-thumb-color: #302e2e;
   --slider-bg-color: #3f3d3d;
