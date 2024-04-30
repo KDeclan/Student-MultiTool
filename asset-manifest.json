@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/Student-MultiTool/static/css/main.f84a9f20.chunk.css",
+    "main.js": "/Student-MultiTool/static/js/main.0ce0b150.chunk.js",
+    "main.js.map": "/Student-MultiTool/static/js/main.0ce0b150.chunk.js.map",
+    "runtime~main.js": "/Student-MultiTool/static/js/runtime~main.a07d19cf.js",
+    "runtime~main.js.map": "/Student-MultiTool/static/js/runtime~main.a07d19cf.js.map",
+    "static/css/2.98036eff.chunk.css": "/Student-MultiTool/static/css/2.98036eff.chunk.css",
+    "static/js/2.a57f8858.chunk.js": "/Student-MultiTool/static/js/2.a57f8858.chunk.js",
+    "static/js/2.a57f8858.chunk.js.map": "/Student-MultiTool/static/js/2.a57f8858.chunk.js.map",
+    "static/js/3.44b60ca4.chunk.js": "/Student-MultiTool/static/js/3.44b60ca4.chunk.js",
+    "static/js/3.44b60ca4.chunk.js.map": "/Student-MultiTool/static/js/3.44b60ca4.chunk.js.map",
+    "index.html": "/Student-MultiTool/index.html",
+    "precache-manifest.e7c1a66b7a248bfd062d0cffa7da4ed6.js": "/Student-MultiTool/precache-manifest.e7c1a66b7a248bfd062d0cffa7da4ed6.js",
+    "service-worker.js": "/Student-MultiTool/service-worker.js",
+    "static/css/2.98036eff.chunk.css.map": "/Student-MultiTool/static/css/2.98036eff.chunk.css.map",
+    "static/css/main.f84a9f20.chunk.css.map": "/Student-MultiTool/static/css/main.f84a9f20.chunk.css.map"
+  }
+}
