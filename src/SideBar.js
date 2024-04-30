@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "./ThemeContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -11,6 +11,7 @@ import {
   FaPlay,
   FaPause,
   FaStop,
+  FaMusic,
 } from "react-icons/fa";
 import { GoArrowUp, GoArrowDown, GoMoon } from "react-icons/go";
 import { IoAddCircle } from "react-icons/io5";
@@ -21,12 +22,35 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showQuoteDisplay, setShowQuoteDisplay] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
+  const [studyTime, setStudyTime] = useState(25);
+  const [breakTime, setBreakTime] = useState(5);
   const [backgroundColor, setBackgroundColor] = useState("");
   const [quote, setQuote] = useState({
     text: "Press 'New Quote' Button",
     author: "",
   });
   const { theme, toggleTheme } = useTheme();
+
+  const incrementStudy = () => {
+    if (studyTime < 60) {
+      setStudyTime(studyTime + 1);
+    }
+  };
+  const decrementStudy = () => {
+    if (studyTime > 1) {
+      setStudyTime(studyTime - 1);
+    }
+  };
+  const incrementBreak = () => {
+    if (breakTime < 30) {
+      setBreakTime(breakTime + 1);
+    }
+  };
+  const decrementBreak = () => {
+    if (breakTime > 1) {
+      setBreakTime(breakTime - 1);
+    }
+  };
 
   const handleNewQuote = () => {
     const quoteColors = [
@@ -77,7 +101,15 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
           backgroundColor={backgroundColor}
         />
       ) : showTimer ? (
-        <TimerDisplay handleShowTimer={() => setShowTimer(!showTimer)} />
+        <TimerDisplay
+          handleShowTimer={() => setShowTimer(!showTimer)}
+          studyTime={studyTime}
+          breakTime={breakTime}
+          incrementStudy={incrementStudy}
+          decrementStudy={decrementStudy}
+          incrementBreak={incrementBreak}
+          decrementBreak={decrementBreak}
+        />
       ) : (
         <MainSection
           onAddTaskClick={onAddTaskClick}
@@ -152,62 +184,159 @@ const QuoteDisplay = ({
   </>
 );
 
-const TimerDisplay = ({ handleShowTimer }) => (
-  <>
-    <div id="timer-display" className="border-bar">
-      <h2>
-        <FaStopwatch /> Study Clock
-      </h2>
-    </div>
-    <div id="timer-container">
-      <div id="study-section">
-        <p>Study</p>
-        <p className="hover-effect">
-          <GoArrowUp color="var(--accent-color)" />
-        </p>
-        <p>25</p>
-        <p className="hover-effect">
-          <GoArrowDown color="var(--accent-color)" />
-        </p>
+const TimerDisplay = ({
+  handleShowTimer,
+  studyTime,
+  breakTime,
+  incrementStudy,
+  decrementStudy,
+  incrementBreak,
+  decrementBreak,
+}) => {
+  const [timerActive, setTimerActive] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(studyTime * 60);
+  const [intervalId, setIntervalId] = useState(null);
+  const [isStudyTime, setIsStudyTime] = useState(true);
+  const [alarmPlaying, setAlarmPlaying] = useState(false);
+  const audioRef = React.useRef(null);
+  const [volume, setVolume] = useState(0.5);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/timer-sound.mp3");
+    audioRef.current.volume = volume;
+    audioRef.current.load();
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      playSound();
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
+    setTimeLeft((isStudyTime ? studyTime : breakTime) * 60);
+  }, [studyTime, breakTime, isStudyTime]);
+
+  const playSound = () => {
+    if (audioRef.current) {
+      audioRef.current.play().then(() => {
+        setAlarmPlaying(true);
+        toggleTimer();
+        setIsStudyTime(!isStudyTime);
+        setTimeLeft((isStudyTime ? breakTime : studyTime) * 60);
+      });
+    }
+  };
+
+  const toggleTimer = () => {
+    if (timerActive) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    } else {
+      const id = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+      setIntervalId(id);
+    }
+    setTimerActive(!timerActive);
+  };
+
+  const stopTimer = () => {
+    if (intervalId) clearInterval(intervalId);
+    setTimerActive(false);
+    setIntervalId(null);
+    setTimeLeft((isStudyTime ? studyTime : breakTime) * 60);
+  };
+
+  const stopAlarm = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setAlarmPlaying(false);
+    }
+  };
+
+  const formatTime = (timeLeft) => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  return (
+    <>
+      <div id="timer-display" className="border-bar">
+        <h2>
+          <FaStopwatch /> Study Clock
+        </h2>
       </div>
-      <div id="break-section">
-        <p>Break</p>
-        <p className="hover-effect">
-          <GoArrowUp color="var(--accent-color)" />
-        </p>
-        <p>5</p>
-        <p className="hover-effect">
-          <GoArrowDown color="var(--accent-color)" />
-        </p>
+      <div id="timer-container">
+        <div id="study-section">
+          <p>Study</p>
+          <p className="hover-effect" onClick={incrementStudy}>
+            <GoArrowUp color="var(--accent-color)" />
+          </p>
+          <p>{studyTime}</p>
+          <p className="hover-effect" onClick={decrementStudy}>
+            <GoArrowDown color="var(--accent-color)" />
+          </p>
+        </div>
+        <div id="break-section">
+          <p>Break</p>
+          <p className="hover-effect" onClick={incrementBreak}>
+            <GoArrowUp color="var(--accent-color)" />
+          </p>
+          <p>{breakTime}</p>
+          <p className="hover-effect" onClick={decrementBreak}>
+            <GoArrowDown color="var(--accent-color)" />
+          </p>
+        </div>
       </div>
-    </div>
-    <div id="time-display" className="card p-3">
-      <p
+      <div
+        id="time-display"
+        className="card p-3"
         style={{
-          backgroundColor: "#b1b1b1",
-          color: "var(--text-color)",
-          borderRadius: ".5em",
+          color: "black",
           fontSize: "2rem",
         }}
       >
-        25:00
-      </p>
-      <div id="time-btns">
-        <button className="btn btn-primary">
-          <FaPlay />
-        </button>
-        <button className="btn btn-primary">
-          <FaStop />
+        <p style={{ backgroundColor: "#ccc", borderRadius: ".2em" }}>
+          {formatTime(timeLeft)}
+        </p>
+        <div id="time-btns">
+          <button className="btn btn-primary" onClick={toggleTimer}>
+            {timerActive ? <FaPause /> : <FaPlay />}
+          </button>
+          <button className="btn btn-primary" onClick={stopTimer}>
+            <FaStop />
+          </button>
+          {alarmPlaying && (
+            <button className="btn btn-warning" onClick={stopAlarm}>
+              <FaMusic />
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="volume-slider-container">
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={volume}
+          onChange={(e) => setVolume(e.target.value)}
+          style={{ width: "100%", background: "transparent" }}
+        />
+      </div>
+      <div className="hover-effect return-btn-section">
+        <button className="btn return-btn" onClick={handleShowTimer}>
+          ◄ Return
         </button>
       </div>
-    </div>
-    <div className="hover-effect return-btn-section">
-      <button className="btn return-btn" onClick={handleShowTimer}>
-        ◄ Return
-      </button>
-    </div>
-  </>
-);
+    </>
+  );
+};
 
 const MainSection = ({
   onAddTaskClick,
