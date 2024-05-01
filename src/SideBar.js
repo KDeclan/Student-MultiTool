@@ -203,9 +203,18 @@ const TimerDisplay = ({
 
   useEffect(() => {
     audioRef.current = new Audio("/timer-sound.mp3");
-    audioRef.current.volume = volume;
-    audioRef.current.load();
+
+    return () => {
+      audioRef.current.pause();
+      audioRef.current = null;
+    };
   }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -234,7 +243,9 @@ const TimerDisplay = ({
       setIntervalId(null);
     } else {
       const id = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
+        setTimeLeft((prevTime) => {
+          return Math.max(prevTime - 1, 0);
+        });
       }, 1000);
       setIntervalId(id);
     }

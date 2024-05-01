@@ -108,7 +108,7 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
 
   useEffect(() => {
     const updateTimeOfDay = () => {
-      setTimeofDay(isDayOrNight());
+      setTimeofDay(isDayOrNight);
     };
 
     updateTimeOfDay();
