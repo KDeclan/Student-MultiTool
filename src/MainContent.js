@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useTheme } from "./ThemeContext";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import "./MainContent.css";
@@ -72,25 +72,25 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
     setShowAddForm(false);
   };
 
-  const morningMessages = [
-    ["Good Morning 🌞"],
-    ["Early Bird Gets The 🪱"],
-    ["Rise and Shine! 🌅"],
-  ];
-  const afternoonMessages = [
-    ["Good Afternoon 🤠"],
-    ["Another Day Another 💵!"],
-    ["Don't Forget to Take Breaks! 🙂"],
-  ];
-  const nightMessages = [
-    ["Good Night 😴"],
-    ["💤💤💤"],
-    ["It's Late 🌙 Remember to Take Breaks"],
-  ];
-
-  const isDayOrNight = () => {
+  const isDayOrNight = useCallback(() => {
     const now = new Date();
     const hour = now.getHours();
+
+    const morningMessages = [
+      "Good Morning 🌞",
+      "Early Bird Gets The 🪱",
+      "Rise and Shine! 🌅",
+    ];
+    const afternoonMessages = [
+      "Good Afternoon 🤠",
+      "Another Day Another 💵!",
+      "Don't Forget to Take Breaks! 🙂",
+    ];
+    const nightMessages = [
+      "Good Night 😴",
+      "💤💤💤",
+      "It's Late 🌙 Remember to Take Breaks",
+    ];
 
     const getRandomMessage = (messages) => {
       const index = Math.floor(Math.random() * messages.length);
@@ -104,18 +104,18 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
     } else {
       return getRandomMessage(nightMessages);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const updateTimeOfDay = () => {
-      setTimeofDay(isDayOrNight);
+      setTimeofDay(isDayOrNight());
     };
 
     updateTimeOfDay();
 
     const interval = setInterval(updateTimeOfDay, 3600000); // 3600000 ms = 1 hour
     return () => clearInterval(interval);
-  }, []);
+  }, [isDayOrNight]);
 
   return (
     <div

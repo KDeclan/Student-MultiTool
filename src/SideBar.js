@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTheme } from "./ThemeContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -217,27 +217,10 @@ const TimerDisplay = ({
   }, [volume]);
 
   useEffect(() => {
-    if (timeLeft === 0) {
-      playSound();
-    }
-  }, [timeLeft]);
-
-  useEffect(() => {
     setTimeLeft((isStudyTime ? studyTime : breakTime) * 60);
   }, [studyTime, breakTime, isStudyTime]);
 
-  const playSound = () => {
-    if (audioRef.current) {
-      audioRef.current.play().then(() => {
-        setAlarmPlaying(true);
-        toggleTimer();
-        setIsStudyTime(!isStudyTime);
-        setTimeLeft((isStudyTime ? breakTime : studyTime) * 60);
-      });
-    }
-  };
-
-  const toggleTimer = () => {
+  const toggleTimer = useCallback(() => {
     if (timerActive) {
       clearInterval(intervalId);
       setIntervalId(null);
@@ -249,8 +232,36 @@ const TimerDisplay = ({
       }, 1000);
       setIntervalId(id);
     }
-    setTimerActive(!timerActive);
-  };
+    setTimerActive((prevTimerActive) => !prevTimerActive);
+  }, [timerActive, intervalId, setTimeLeft, setIntervalId]);
+
+  const playSound = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current
+        .play()
+        .then(() => {
+          setAlarmPlaying(true);
+          toggleTimer();
+          setIsStudyTime(!isStudyTime);
+          setTimeLeft((isStudyTime ? breakTime : studyTime) * 60);
+        })
+        .catch((err) => console.error("Failed to play sound:", err));
+    }
+  }, [
+    setAlarmPlaying,
+    setIsStudyTime,
+    setTimeLeft,
+    toggleTimer,
+    studyTime,
+    breakTime,
+    isStudyTime,
+  ]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      playSound();
+    }
+  }, [timeLeft, playSound]);
 
   const stopTimer = () => {
     if (intervalId) clearInterval(intervalId);
