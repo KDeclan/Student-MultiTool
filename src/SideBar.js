@@ -139,7 +139,7 @@ const SettingsSection = ({ handleSettingsClick, theme, toggleTheme }) => (
         <input
           type="checkbox"
           className="toggle-switch-checkbox"
-          onClick={toggleTheme}
+          onChange={toggleTheme}
           checked={theme === "dark"}
         />
         <span className="toggle-switch-slider"></span>

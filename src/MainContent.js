@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useTheme } from "./ThemeContext";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import "./MainContent.css";
@@ -15,25 +15,6 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
 
   const { theme } = useTheme();
 
-  const filteredTodos = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().slice(0, 10);
-
-    return todos.filter((todo) => {
-      const taskDateStr = new Date(todo.date).toISOString().slice(0, 10);
-      if (currentFilter === "Today") {
-        return taskDateStr === todayStr;
-      } else if (currentFilter === "Next 7 Days") {
-        const inOneWeek = new Date(today);
-        inOneWeek.setDate(today.getDate() + 7);
-        const inOneWeekStr = inOneWeek.toISOString().slice(0, 10);
-        return taskDateStr >= todayStr && taskDateStr < inOneWeekStr;
-      }
-      return true;
-    });
-  };
-
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
@@ -45,7 +26,6 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
 
     const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setTaskName("");
     setTaskDate("");
     setShowAddForm(false);
@@ -59,13 +39,11 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
       return todo;
     });
     setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
 
   const deleteTodo = (index) => {
     const updatedTodos = todos.filter((_, idx) => idx !== index);
     setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
   const handleCancel = () => {
@@ -116,6 +94,12 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
     const interval = setInterval(updateTimeOfDay, 3600000); // 3600000 ms = 1 hour
     return () => clearInterval(interval);
   }, [isDayOrNight]);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  const filteredTodos = useFilteredTodos(todos, currentFilter);
 
   return (
     <div
@@ -175,7 +159,7 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
           </div>
         ) : (
           <div id="todos-display" className="container">
-            {filteredTodos().map((todo, index) => (
+            {filteredTodos.map((todo, index) => (
               <div
                 key={index}
                 className={`container todo-card ${
@@ -216,6 +200,27 @@ const MainContent = ({ showAddForm, setShowAddForm, currentFilter }) => {
       </div>
     </div>
   );
+};
+
+const useFilteredTodos = (todos, filter) => {
+  return useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().slice(0, 10);
+
+    return todos.filter((todo) => {
+      const taskDateStr = new Date(todo.date).toISOString().slice(0, 10);
+      if (filter === "Today") {
+        return taskDateStr === todayStr;
+      } else if (filter === "Next 7 Days") {
+        const inOneWeek = new Date(today);
+        inOneWeek.setDate(today.getDate() + 7);
+        const inOneWeekStr = inOneWeek.toISOString().slice(0, 10);
+        return taskDateStr >= todayStr && taskDateStr < inOneWeekStr;
+      }
+      return true;
+    });
+  }, [todos, filter]);
 };
 
 export default MainContent;
