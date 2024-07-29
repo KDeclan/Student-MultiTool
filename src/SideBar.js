@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTheme } from "./ThemeContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -74,135 +74,17 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
       .catch(() => setQuote({ text: "Failed to load quote", author: "" }));
   };
 
-  return (
-    <div
-      id="sidebar-top-level"
-      className="d-flex flex-column align-items-center justify-content-between vh-100"
-      data-theme={theme}
-      style={{
-        boxShadow: ".2em 0 .5em var(--sidebar-shadow)",
-        position: "fixed",
-        width: "20em",
-        top: 0,
-        left: 0,
-      }}
-    >
-      {showSettings ? (
-        <SettingsSection
-          handleSettingsClick={() => setShowSettings(!showSettings)}
-          theme={theme}
-          toggleTheme={toggleTheme}
-        />
-      ) : showQuoteDisplay ? (
-        <QuoteDisplay
-          quote={quote}
-          handleNewQuote={handleNewQuote}
-          handleQuoteDisplay={() => setShowQuoteDisplay(!showQuoteDisplay)}
-          backgroundColor={backgroundColor}
-        />
-      ) : showTimer ? (
-        <TimerDisplay
-          handleShowTimer={() => setShowTimer(!showTimer)}
-          studyTime={studyTime}
-          breakTime={breakTime}
-          incrementStudy={incrementStudy}
-          decrementStudy={decrementStudy}
-          incrementBreak={incrementBreak}
-          decrementBreak={decrementBreak}
-        />
-      ) : (
-        <MainSection
-          onAddTaskClick={onAddTaskClick}
-          onFilterChange={onFilterChange}
-          handleSettingsClick={() => setShowSettings(!showSettings)}
-          handleQuoteDisplay={() => setShowQuoteDisplay(!showQuoteDisplay)}
-          handleShowTimer={() => setShowTimer(!showTimer)}
-        />
-      )}
-    </div>
-  );
-};
-
-const SettingsSection = ({ handleSettingsClick, theme, toggleTheme }) => (
-  <>
-    <div id="settings-top-bar">
-      <h2 id="settings-head-text">
-        <FaCog /> Settings
-      </h2>
-    </div>
-    <div id="color-settings">
-      <h2>
-        <GoMoon />
-        Dark Mode
-      </h2>
-      <label className="toggle-switch">
-        <input
-          type="checkbox"
-          className="toggle-switch-checkbox"
-          onChange={toggleTheme}
-          checked={theme === "dark"}
-        />
-        <span className="toggle-switch-slider"></span>
-      </label>
-    </div>
-    <div className="hover-effect return-btn-section">
-      <button className="btn return-btn" onClick={handleSettingsClick}>
-        ◄ Return
-      </button>
-    </div>
-  </>
-);
-
-const QuoteDisplay = ({
-  quote,
-  handleNewQuote,
-  handleQuoteDisplay,
-  backgroundColor,
-}) => (
-  <>
-    <div id="quote-display">
-      <h2>
-        <FaQuoteRight size="1.5rem" /> Quote Machine
-      </h2>
-    </div>
-    <div id="quote-text">
-      <p className="card p-3" style={{ color: "black", backgroundColor }}>
-        {quote.text}
-      </p>
-      <p style={{ alignSelf: "flex-end" }}>- {quote.author || "Unknown"}</p>
-    </div>
-    <div id="new-quote-btn">
-      <button className="btn btn-primary" onClick={handleNewQuote}>
-        New Quote
-      </button>
-    </div>
-    <div className="hover-effect return-btn-section">
-      <button className="btn return-btn" onClick={handleQuoteDisplay}>
-        ◄ Return
-      </button>
-    </div>
-  </>
-);
-
-const TimerDisplay = ({
-  handleShowTimer,
-  studyTime,
-  breakTime,
-  incrementStudy,
-  decrementStudy,
-  incrementBreak,
-  decrementBreak,
-}) => {
+  // Timer state and logic
   const [timerActive, setTimerActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(studyTime * 60);
   const [intervalId, setIntervalId] = useState(null);
   const [isStudyTime, setIsStudyTime] = useState(true);
   const [alarmPlaying, setAlarmPlaying] = useState(false);
-  const audioRef = React.useRef(null);
+  const audioRef = useRef(null);
   const [volume, setVolume] = useState(0.5);
 
   useEffect(() => {
-    audioRef.current = new Audio("/timer-sound.mp3");
+    audioRef.current = new Audio(process.env.PUBLIC_URL + "/timer-sound.mp3");
 
     return () => {
       audioRef.current.pause();
@@ -287,78 +169,213 @@ const TimerDisplay = ({
   };
 
   return (
-    <>
-      <div id="timer-display" className="border-bar">
-        <h2>
-          <FaStopwatch /> Study Clock
-        </h2>
-      </div>
-      <div id="timer-container">
-        <div id="study-section">
-          <p>Study</p>
-          <p className="hover-effect" onClick={incrementStudy}>
-            <GoArrowUp color="var(--accent-color)" />
-          </p>
-          <p>{studyTime}</p>
-          <p className="hover-effect" onClick={decrementStudy}>
-            <GoArrowDown color="var(--accent-color)" />
-          </p>
-        </div>
-        <div id="break-section">
-          <p>Break</p>
-          <p className="hover-effect" onClick={incrementBreak}>
-            <GoArrowUp color="var(--accent-color)" />
-          </p>
-          <p>{breakTime}</p>
-          <p className="hover-effect" onClick={decrementBreak}>
-            <GoArrowDown color="var(--accent-color)" />
-          </p>
-        </div>
-      </div>
-      <div
-        id="time-display"
-        className="card p-3"
-        style={{
-          color: "black",
-          fontSize: "2rem",
-        }}
-      >
-        <p style={{ backgroundColor: "#ccc", borderRadius: ".2em" }}>
-          {formatTime(timeLeft)}
-        </p>
-        <div id="time-btns">
-          <button className="btn btn-primary" onClick={toggleTimer}>
-            {timerActive ? <FaPause /> : <FaPlay />}
-          </button>
-          <button className="btn btn-primary" onClick={stopTimer}>
-            <FaStop />
-          </button>
-          {alarmPlaying && (
-            <button className="btn btn-warning" onClick={stopAlarm}>
-              <FaMusic />
-            </button>
-          )}
-        </div>
-      </div>
-      <div className="volume-slider-container">
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => setVolume(e.target.value)}
-          style={{ width: "100%", background: "transparent" }}
+    <div
+      id="sidebar-top-level"
+      className="d-flex flex-column align-items-center justify-content-between vh-100"
+      data-theme={theme}
+      style={{
+        boxShadow: ".2em 0 .5em var(--sidebar-shadow)",
+        position: "fixed",
+        width: "20em",
+        top: 0,
+        left: 0,
+      }}
+    >
+      {showSettings ? (
+        <SettingsSection
+          handleSettingsClick={() => setShowSettings(!showSettings)}
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
-      </div>
-      <div className="hover-effect return-btn-section">
-        <button className="btn return-btn" onClick={handleShowTimer}>
-          ◄ Return
-        </button>
-      </div>
-    </>
+      ) : showQuoteDisplay ? (
+        <QuoteDisplay
+          quote={quote}
+          handleNewQuote={handleNewQuote}
+          handleQuoteDisplay={() => setShowQuoteDisplay(!showQuoteDisplay)}
+          backgroundColor={backgroundColor}
+        />
+      ) : showTimer ? (
+        <TimerDisplay
+          handleShowTimer={() => setShowTimer(!showTimer)}
+          studyTime={studyTime}
+          breakTime={breakTime}
+          incrementStudy={incrementStudy}
+          decrementStudy={decrementStudy}
+          incrementBreak={incrementBreak}
+          decrementBreak={decrementBreak}
+          timerActive={timerActive}
+          timeLeft={timeLeft}
+          toggleTimer={toggleTimer}
+          stopTimer={stopTimer}
+          formatTime={formatTime}
+          alarmPlaying={alarmPlaying}
+          stopAlarm={stopAlarm}
+          volume={volume}
+          setVolume={setVolume}
+        />
+      ) : (
+        <MainSection
+          onAddTaskClick={onAddTaskClick}
+          onFilterChange={onFilterChange}
+          handleSettingsClick={() => setShowSettings(!showSettings)}
+          handleQuoteDisplay={() => setShowQuoteDisplay(!showQuoteDisplay)}
+          handleShowTimer={() => setShowTimer(!showTimer)}
+        />
+      )}
+    </div>
   );
 };
+
+const SettingsSection = ({ handleSettingsClick, theme, toggleTheme }) => (
+  <>
+    <div id="settings-top-bar">
+      <h2 id="settings-head-text">
+        <FaCog /> Settings
+      </h2>
+    </div>
+    <div id="color-settings">
+      <h2>
+        <GoMoon />
+        Dark Mode
+      </h2>
+      <label className="toggle-switch">
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox"
+          onChange={toggleTheme}
+          checked={theme === "dark"}
+        />
+        <span className="toggle-switch-slider"></span>
+      </label>
+    </div>
+    <div className="hover-effect return-btn-section">
+      <button className="btn return-btn" onClick={handleSettingsClick}>
+        ◄ Return
+      </button>
+    </div>
+  </>
+);
+
+const QuoteDisplay = ({
+  quote,
+  handleNewQuote,
+  handleQuoteDisplay,
+  backgroundColor,
+}) => (
+  <>
+    <div id="quote-display">
+      <h2>
+        <FaQuoteRight size="1.5rem" /> Quote Machine
+      </h2>
+    </div>
+    <div id="quote-text">
+      <p className="card p-3" style={{ color: "black", backgroundColor }}>
+        {quote.text}
+      </p>
+      <p style={{ alignSelf: "flex-end" }}>- {quote.author || "Unknown"}</p>
+    </div>
+    <div id="new-quote-btn">
+      <button className="btn btn-primary" onClick={handleNewQuote}>
+        New Quote
+      </button>
+    </div>
+    <div className="hover-effect return-btn-section">
+      <button className="btn return-btn" onClick={handleQuoteDisplay}>
+        ◄ Return
+      </button>
+    </div>
+  </>
+);
+
+const TimerDisplay = ({
+  handleShowTimer,
+  studyTime,
+  breakTime,
+  incrementStudy,
+  decrementStudy,
+  incrementBreak,
+  decrementBreak,
+  timerActive,
+  timeLeft,
+  toggleTimer,
+  stopTimer,
+  formatTime,
+  alarmPlaying,
+  stopAlarm,
+  volume,
+  setVolume,
+}) => (
+  <>
+    <div id="timer-display" className="border-bar">
+      <h2>
+        <FaStopwatch /> Study Clock
+      </h2>
+    </div>
+    <div id="timer-container">
+      <div id="study-section">
+        <p>Study</p>
+        <p className="hover-effect" onClick={incrementStudy}>
+          <GoArrowUp color="var(--accent-color)" />
+        </p>
+        <p>{studyTime}</p>
+        <p className="hover-effect" onClick={decrementStudy}>
+          <GoArrowDown color="var(--accent-color)" />
+        </p>
+      </div>
+      <div id="break-section">
+        <p>Break</p>
+        <p className="hover-effect" onClick={incrementBreak}>
+          <GoArrowUp color="var(--accent-color)" />
+        </p>
+        <p>{breakTime}</p>
+        <p className="hover-effect" onClick={decrementBreak}>
+          <GoArrowDown color="var(--accent-color)" />
+        </p>
+      </div>
+    </div>
+    <div
+      id="time-display"
+      className="card p-3"
+      style={{
+        color: "black",
+        fontSize: "2rem",
+      }}
+    >
+      <p style={{ backgroundColor: "#ccc", borderRadius: ".2em" }}>
+        {formatTime(timeLeft)}
+      </p>
+      <div id="time-btns">
+        <button className="btn btn-primary" onClick={toggleTimer}>
+          {timerActive ? <FaPause /> : <FaPlay />}
+        </button>
+        <button className="btn btn-primary" onClick={stopTimer}>
+          <FaStop />
+        </button>
+        {alarmPlaying && (
+          <button className="btn btn-warning" onClick={stopAlarm}>
+            <FaMusic />
+          </button>
+        )}
+      </div>
+    </div>
+    <div className="volume-slider-container">
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value={volume}
+        onChange={(e) => setVolume(e.target.value)}
+        style={{ width: "100%", background: "transparent" }}
+      />
+    </div>
+    <div className="hover-effect return-btn-section">
+      <button className="btn return-btn" onClick={handleShowTimer}>
+        ◄ Return
+      </button>
+    </div>
+  </>
+);
 
 const MainSection = ({
   onAddTaskClick,
