@@ -12,13 +12,14 @@ import {
   FaPause,
   FaStop,
   FaMusic,
+  FaBars,
 } from "react-icons/fa";
 import { GoArrowUp, GoArrowDown, GoMoon } from "react-icons/go";
 import { IoAddCircle } from "react-icons/io5";
 import "./SideBar.css";
 import "./global.css";
 
-const SideBar = ({ onAddTaskClick, onFilterChange }) => {
+const SideBar = ({ onAddTaskClick, onFilterChange, toggleSidebar }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showQuoteDisplay, setShowQuoteDisplay] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
@@ -32,24 +33,16 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
   const { theme, toggleTheme } = useTheme();
 
   const incrementStudy = () => {
-    if (studyTime < 60) {
-      setStudyTime(studyTime + 1);
-    }
+    if (studyTime < 60) setStudyTime(studyTime + 1);
   };
   const decrementStudy = () => {
-    if (studyTime > 1) {
-      setStudyTime(studyTime - 1);
-    }
+    if (studyTime > 1) setStudyTime(studyTime - 1);
   };
   const incrementBreak = () => {
-    if (breakTime < 30) {
-      setBreakTime(breakTime + 1);
-    }
+    if (breakTime < 30) setBreakTime(breakTime + 1);
   };
   const decrementBreak = () => {
-    if (breakTime > 1) {
-      setBreakTime(breakTime - 1);
-    }
+    if (breakTime > 1) setBreakTime(breakTime - 1);
   };
 
   const handleNewQuote = () => {
@@ -74,7 +67,6 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
       .catch(() => setQuote({ text: "Failed to load quote", author: "" }));
   };
 
-  // Timer state and logic
   const [timerActive, setTimerActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(studyTime * 60);
   const [intervalId, setIntervalId] = useState(null);
@@ -85,7 +77,6 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
 
   useEffect(() => {
     audioRef.current = new Audio(process.env.PUBLIC_URL + "/timer-sound.mp3");
-
     return () => {
       audioRef.current.pause();
       audioRef.current = null;
@@ -93,9 +84,7 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
+    if (audioRef.current) audioRef.current.volume = volume;
   }, [volume]);
 
   useEffect(() => {
@@ -108,14 +97,12 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
       setIntervalId(null);
     } else {
       const id = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          return Math.max(prevTime - 1, 0);
-        });
+        setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
       }, 1000);
       setIntervalId(id);
     }
-    setTimerActive((prevTimerActive) => !prevTimerActive);
-  }, [timerActive, intervalId, setTimeLeft, setIntervalId]);
+    setTimerActive(!timerActive);
+  }, [timerActive, intervalId]);
 
   const playSound = useCallback(() => {
     if (audioRef.current) {
@@ -129,20 +116,10 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
         })
         .catch((err) => console.error("Failed to play sound:", err));
     }
-  }, [
-    setAlarmPlaying,
-    setIsStudyTime,
-    setTimeLeft,
-    toggleTimer,
-    studyTime,
-    breakTime,
-    isStudyTime,
-  ]);
+  }, [toggleTimer, studyTime, breakTime, isStudyTime]);
 
   useEffect(() => {
-    if (timeLeft === 0) {
-      playSound();
-    }
+    if (timeLeft === 0) playSound();
   }, [timeLeft, playSound]);
 
   const stopTimer = () => {
@@ -173,14 +150,14 @@ const SideBar = ({ onAddTaskClick, onFilterChange }) => {
       id="sidebar-top-level"
       className="d-flex flex-column align-items-center justify-content-between vh-100"
       data-theme={theme}
-      style={{
-        boxShadow: ".2em 0 .5em var(--sidebar-shadow)",
-        position: "fixed",
-        width: "20em",
-        top: 0,
-        left: 0,
-      }}
     >
+      <div id="sidebar-header" className="w-100 text-right p-2">
+        <FaBars
+          onClick={toggleSidebar}
+          className="d-md-none"
+          style={{ cursor: "pointer" }}
+        />
+      </div>
       {showSettings ? (
         <SettingsSection
           handleSettingsClick={() => setShowSettings(!showSettings)}
@@ -235,8 +212,7 @@ const SettingsSection = ({ handleSettingsClick, theme, toggleTheme }) => (
     </div>
     <div id="color-settings">
       <h2>
-        <GoMoon />
-        Dark Mode
+        <GoMoon /> Dark Mode
       </h2>
       <label className="toggle-switch">
         <input
@@ -336,10 +312,7 @@ const TimerDisplay = ({
     <div
       id="time-display"
       className="card p-3"
-      style={{
-        color: "black",
-        fontSize: "2rem",
-      }}
+      style={{ color: "black", fontSize: "2rem" }}
     >
       <p style={{ backgroundColor: "#ccc", borderRadius: ".2em" }}>
         {formatTime(timeLeft)}

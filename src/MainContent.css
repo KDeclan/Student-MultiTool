@@ -136,3 +136,26 @@ body {
   visibility: visible;
   transform: translateX(0);
 }
+
+@media (max-width: 768px) {
+  #main-body {
+    overflow-y: auto;
+    width: 95%;
+  }
+
+  #main-heading {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 1em 0;
+    border-bottom: 0.2em solid var(--border-color);
+  }
+
+  #todos-display {
+    padding: 0.5em;
+  }
+
+  .todo-card {
+    font-size: 1rem;
+    padding: 0.5em;
+  }
+}
